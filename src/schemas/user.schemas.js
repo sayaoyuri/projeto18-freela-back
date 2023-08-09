@@ -7,3 +7,8 @@ export const signUpSchema = Joi.object({
   cpf: Joi.string().length(11).pattern(/^[0-9]+$/).required(),
   phone: Joi.string().length(11).pattern(/^[0-9]+$/).required()
 });
+
+export const signInSchema = Joi.object({
+  email: Joi.string().email().max(100).trim().required(),
+  password: Joi.string().min(6).max(25).trim().required(),
+});
