@@ -13,3 +13,17 @@ export const createProduct = async (ownerId, name, description, categoryId, pric
 export const listAllCategories = async () => {
   return await db.query(`SELECT id AS value, name AS label FROM categories`);
 };
+
+export const listProductById = async (id) => {
+  return await db.query(`
+    SELECT p.name, p.description, u.name AS "ownerName", u.email, u.phone, c.name AS categoria, p.price, p1.url AS "imageUrl" 
+      FROM products p
+        JOIN users u 
+          ON u.id = p.owner_id
+        JOIN categories c
+          ON c.id = p.category_id
+        JOIN photos p1 
+          ON p1.id = p.photo_id
+      WHERE p.id = $1 AND p.available = TRUE;
+  `, [id]);
+};

@@ -1,4 +1,4 @@
-import { createProduct, listAllCategories } from "../repositories/product.repository.js";
+import { createProduct, listAllCategories, listProductById } from "../repositories/product.repository.js";
 
 export const registerProduct = async (req, res) => {
   try {
@@ -22,6 +22,22 @@ export const getCategories = async (req, res) => {
 
     return res.send(result.rows);
   } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
+export const getProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await listProductById(id);
+    console.log(result);
+
+    if(result.rowCont === 0) return res.status(404).send("Produto inexistente!");
+
+    return res.status(200).send(result.rows[0]);
+  } catch (error) {
+    console.log(error);
     return res.status(500).send(error.message);
   }
 };
