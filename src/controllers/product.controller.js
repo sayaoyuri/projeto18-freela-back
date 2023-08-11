@@ -1,4 +1,4 @@
-import { createProduct, listAllCategories, listProductById } from "../repositories/product.repository.js";
+import { createProduct, listAllCategories, listAllProducts, listProductById } from "../repositories/product.repository.js";
 
 export const registerProduct = async (req, res) => {
   try {
@@ -38,6 +38,16 @@ export const getProduct = async (req, res) => {
     return res.status(200).send(result.rows[0]);
   } catch (error) {
     console.log(error);
+    return res.status(500).send(error.message);
+  }
+};
+
+export const getProducts = async (req, res) => {
+  try {
+    const result = await listAllProducts();
+
+    return res.send(result.rows);
+  } catch (error) {
     return res.status(500).send(error.message);
   }
 };

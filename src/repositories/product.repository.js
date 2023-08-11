@@ -27,3 +27,16 @@ export const listProductById = async (id) => {
       WHERE p.id = $1 AND p.available = TRUE;
   `, [id]);
 };
+
+export const listAllProducts = async () => {
+  return await db.query(`
+    SELECT p.id, p.name, p.price, c.name AS category, p1.url AS "imageUrl" 
+      FROM products p
+        JOIN categories c
+          ON c.id = p.category_id
+        JOIN photos p1 
+          ON p1.id = p.photo_id
+      WHERE p.available = TRUE
+      LIMIT 8;
+  `);
+};
