@@ -36,10 +36,9 @@ export const signIn = async (req, res) => {
     const userData = { id: user.id, name: user.name, email };
 
     const token = createToken(userData);
-
     await createSession(userData.id, token);
 
-    return res.send({ name: userData.name, token});
+    return res.send({ id: userData.id, name: userData.name, token });
   } catch (error) {
     if(error.message === "invalid signature") return res.status(401).send("Login necessário para realizar operação!")
 
