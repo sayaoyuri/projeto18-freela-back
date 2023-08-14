@@ -16,7 +16,7 @@ export const listAllCategories = async () => {
 
 export const listProductById = async (id) => {
   return await db.query(`
-    SELECT p.name, p.description, u.name AS "ownerName", u.email, u.phone, c.name AS category, p.price, p1.url AS "imageUrl" 
+    SELECT p.name, p.description, p.owner_id AS "ownerId", p.available, u.name AS "ownerName", u.email, u.phone, c.name AS category, p.price, p1.url AS "imageUrl" 
       FROM products p
         JOIN users u 
           ON u.id = p.owner_id
@@ -24,7 +24,7 @@ export const listProductById = async (id) => {
           ON c.id = p.category_id
         JOIN photos p1 
           ON p1.id = p.photo_id
-      WHERE p.id = $1 AND p.available = TRUE;
+      WHERE p.id = $1;
   `, [id]);
 };
 
@@ -39,4 +39,10 @@ export const listAllProducts = async () => {
       WHERE p.available = TRUE
       LIMIT 8;
   `);
+};
+
+export const setProductAvailable = async (id, ownerId, available) => {
+  return await db.query(`
+    UPDATE products SET available = $3 WHERE id = $1 AND owner_id = $2;
+  `, [id, ownerId, available]);
 };
