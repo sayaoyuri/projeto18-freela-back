@@ -13,10 +13,10 @@ export const validateAuth = async (req, res, next) => {
     const token = req.headers.authorization?.replace('Bearer ', '');
 
     res.locals.token = Jwt.verify(token, AUTH_KEY);
-
+    
     const isTokenExist = await getSession(token);
     if(isTokenExist.rowCount === 0) return res.sendStatus(401).send("Sessão inválida! Faça login Novamente!");
-
+    
     next();
   } catch (error) {
     console.log(error);

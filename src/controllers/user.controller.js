@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { createUser, getUser } from "../repositories/user.repository.js";
+import { createUser, getUser, getUserData } from "../repositories/user.repository.js";
 import { createToken } from "../middlewares/auth.middleware.js";
 import { createSession } from "../repositories/session.repository.js";
 
@@ -42,6 +42,18 @@ export const signIn = async (req, res) => {
   } catch (error) {
     if(error.message === "invalid signature") return res.status(401).send("Login necessário para realizar operação!")
 
+    return res.status(500).send(error.message);
+  };
+};
+
+export const userData = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await getUserData(id);
+
+    return res.send(result.rows[0]);
+  } catch (error) {
     return res.status(500).send(error.message);
   };
 };
